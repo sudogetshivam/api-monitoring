@@ -1,0 +1,45 @@
+import dotenv from 'dotenv';
+import rateLimit from 'express-rate-limit';
+import { parseComplete } from 'pg-protocol/dist/messages';
+dotenv.config()
+
+const config = {
+    //server
+    node_env: process.env.NODE_ENV || 'development',
+    port: parseInt(process.env.PORT || "5000",10),
+
+    //momgodb
+    mongo:{
+        uri: process.env.MONGO_URI || 'mongodb://localhost:27017/api_monitoring',
+        dbname: process.env.MONGO_DB_NAME || 'api_monitoring'
+    },
+
+    //postgreSQL
+    postgres:{
+        host:process.env.PG_HOST || "localhost",
+        port: parseInt(process.env.PG_PORT || '5432',10),
+        database:process.env.PG_DATABASE || 'api_monitoring',
+        user: process.env.PG_USER || 'postgres',
+        password: process.env.PG_PASSWORD || 'postgres'
+    },
+    rabbit_mq:{
+        url: process.env.RABBITMQ_URL || 'amqp://localhost:5672',
+        queue:process.env.RABBIT_QUEUE || 'api_hits',
+        publisherConfirms: process.env.RABBITMQ_PUBLISHER_CONFIRMS === 'true' || false,
+        retryAttempts: parseInt(process.env.RABBITMQ_RETRY_ATTEMPTS || '3',10),
+        retryDelay: parseInt(process.env.RABBITMQ_RETRY_DELAYS || '1000',10),
+    },
+
+    jwt:{
+        secret: process.env.JWT_SECRET || 'my_secret_key_fcca212711d33306869a896d860df89033330626b9115f5d377b63f572410a51',
+        expiresIn: process.env.JWT_EXPIRES_IN || '24h'
+    },
+
+    rateLimit : {
+        windowMs: parseInt(process.env.RATE_LIMIT_WINDOWS_MS || '900000', 10), // 15 minutes
+        maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '1000',10) // in 15min no more requests that 1000, if exceeds close the window
+    }
+
+}
+
+export default config;
