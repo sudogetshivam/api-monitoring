@@ -69,7 +69,7 @@ const userSchema = new mongoose.Schema({
     },
      role:{
                 type: String,
-                enum: ['super_admin','client-admin','client-viewer'],
+                enum: ['super_admin','client_admin','client-viewer'],
                 default:'client_viewer'
             },
      clientId:{
@@ -85,19 +85,19 @@ const userSchema = new mongoose.Schema({
         },
         permissions:{
             canCreateApiKeys:{
-                Type: Boolean,
+                type: Boolean,
                 default: false,
             },
             canManageUsers:{
-                Type: Boolean,
+                type: Boolean,
                 default: false,
             },
             canViewAnalytics:{
-                Type: Boolean,
+                type: Boolean,
                 default: false,
             },
             canExportData:{
-                Type: Boolean,
+                type: Boolean,
                 default: false,
             },
         }
