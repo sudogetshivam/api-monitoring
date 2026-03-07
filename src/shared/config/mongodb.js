@@ -23,9 +23,11 @@ class MongoConnection {
                 return this.connection
             }
 
-            await this.connection.connect(config.mongo.uri,{
+            await mongoose.connect(config.mongo.uri,{
                 dbname: config.mongo.dbname
             })
+
+            this.connection = mongoose.connection
 
             logger.info(`MongoDB connected: ${config.mongo.uri}`)
 
