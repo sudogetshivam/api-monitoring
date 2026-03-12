@@ -121,7 +121,7 @@ userSchema.pre('save',async function (next) {
     
 })
 
-userSchema.index({clientId:1,isActive:1});//basically it creates B-trees if 1, sorted in ascending order
+userSchema.index({clientId:1,isActive:1});//basically it creates B-trees if 1, sorted in ascending order, write operation 
 userSchema.index({role:1})
 
 const User = mongoose.model("User",userSchema)
