@@ -56,3 +56,5 @@ static validatePassword(password) {
 
 }
 }
+
+export default SecurityUtils;
