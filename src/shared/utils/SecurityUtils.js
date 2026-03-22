@@ -13,7 +13,7 @@ static validatePassword(password) {
     if(!password){
         return({
             success: false,
-            errors: ['Password is required']
+            errors: ['Password is required feild']
         }
         )
     }
