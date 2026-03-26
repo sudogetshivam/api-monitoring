@@ -120,10 +120,50 @@ async function startServer() {
         )
 
         //before getting disconnect we cant lets these run all the time, we need to shutdown it
-        const gracefulShutdown  = async (single) => {
+        const gracefulShutdown  = async (signal) => {
+            logger.info(`Received ${signal}. Shutting down gracefully...`)
 
+            server.close(async()=>{
+                logger.info("HTTP server closed")
+
+                try {
+                    await mongodb.disconnect(); //if this service got hanged or stuck then timeout will run
+                    await postgres.close();
+                    await rabbitmq.close();
+                    logger.info("All services are shutdown succesffully, exiting process");
+                    process.exit(0);
+                } catch (error) {
+                        logger.info("Error during shutdown");
+                        process.exit(1);
+                }
+            })
+
+            setTimeout(()=>{
+                logger.error("Forced shutdown");
+                process.exit(1);
+            },10000)
+        }
+
+        const func = ()=>{
+            process.on("SIGTERM",()=>gracefulShutdown("SIGTERM"))
+            process.on("SIGINT",()=>gracefulShutdown("SIGINT"))
+
+            //Handling uncaugt exceptions
+            process.on('uncaughtException',(error)=>{
+                logger.info("Uncaught Exception:: ", error);
+                gracefulShutdown('uncaughtException');
+            })
+
+            process.on('unhandledRejection',(reason,promise)=>{
+                logger.info("Unhandled Rejection at: ", promise,"reason:",reason)
+                gracefulShutdown('unhandledRejection');
+            })
         }
     } catch (error) {
+        logger.error("Failed to start server: ", error)
+        process.exit(1);
         
     }
 }
+
+startServer()
