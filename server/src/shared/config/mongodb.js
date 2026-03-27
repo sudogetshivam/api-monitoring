@@ -16,7 +16,7 @@ class MongoConnection {
      * @returns {Promise<mongoose.Connection>}
      */
 
-    async connect(){
+    static async connect(){
         try {
             if(this.connection){
                 logger.info("Mongodb already connected");
@@ -39,7 +39,7 @@ class MongoConnection {
                 logger.info("MongoDB disconnected")
             })
 
-            return this.connection()
+            return this.connection;
         } catch (error) {
             logger.error("Failed to Connect MongoDB", error)
             throw error
@@ -49,7 +49,7 @@ class MongoConnection {
     /**
      * This helps to disconnect backend
      */
-    async disconnect(){
+    static async disconnect(){
         try {
             if(this.connection){
                 await mongoose.disconnect()
@@ -63,7 +63,7 @@ class MongoConnection {
     }
     /**
      * Getting current connection
-     * @returns {mongoose.Connection}
+     * @returns {mongoose.Connection} 
      */
     getConnection(){
         return this.connection

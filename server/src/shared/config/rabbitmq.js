@@ -109,3 +109,5 @@ class RabbitMQConnection{
         }
     }
 }
+
+export default RabbitMQConnection
