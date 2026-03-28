@@ -46,21 +46,7 @@ app.use((req,res,next)=>{
     next();
 })
 
-app.use(errorHandler)
-/**
- * It will return like this object
- * {
-  success: true,
-  data: {
-    status: 'healthy',
-    timestamp: ...,
-    uptime: ...
-  },
-  message: "Success",
-  statusCode: 200,
-  timeStamp: "2026-03-25T..."
-}
- */
+
 
 app.get('/health',(req,res)=>{
     res.status(200).json(
@@ -91,6 +77,22 @@ app.get('/' ,(req,res)=>{
 app.use((req,res)=>{
     res.status(404).json(ResponseFormatter.error("Endpoint not found",404))
 })
+
+app.use(errorHandler)
+/**
+ * It will return like this object
+ * {
+  success: true,
+  data: {
+    status: 'healthy',
+    timestamp: ...,
+    uptime: ...
+  },
+  message: "Success",
+  statusCode: 200,
+  timeStamp: "2026-03-25T..."
+}
+ */
 
 async function initializeConnection() {
     try {
@@ -144,7 +146,6 @@ async function startServer() {
             },10000)
         }
 
-        const func = ()=>{
             process.on("SIGTERM",()=>gracefulShutdown("SIGTERM"))
             process.on("SIGINT",()=>gracefulShutdown("SIGINT"))
 
@@ -158,7 +159,8 @@ async function startServer() {
                 logger.info("Unhandled Rejection at: ", promise,"reason:",reason)
                 gracefulShutdown('unhandledRejection');
             })
-        }
+
+        
     } catch (error) {
         logger.error("Failed to start server: ", error)
         process.exit(1);

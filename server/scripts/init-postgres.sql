@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS endpoint_metrics{
+CREATE TABLE IF NOT EXISTS endpoint_metrics(
     id SERIAL PRIMARY KEY, 
     client_id VARCHAR(24) NOT NULL, /*ye hame mongodb se milega*/
     service_name VARCHAR(255) NOT NULL,
@@ -7,17 +7,18 @@ CREATE TABLE IF NOT EXISTS endpoint_metrics{
     --if any requests comes suppose at 10;25 then its timestamp is taken and data/requests is stored inside a bucket whose bucket size is [10:00-11:00]
     -- the aggragted matrix that we will  of whole bucket
     --mhuje 1 ghante ki bucket do ham eska aggregated nikal lenge, esse kya hoga ki ham abde data main cheeze mesaure kar payenge
-    time_bucket TIMESTAMPS NOT NULL,
+    time_bucket TIMESTAMP NOT NULL,
     total_hits INTEGER DEFAULT 0,
     error_hits INTEGER DEFAULT 0, /*client ka aisa api jo user ne use kiya aur usko error mila */
     avg_latency NUMERIC(10,3) DEFAULT 0.000,
     min_latency NUMERIC(10,3) DEFAULT 0.000,
     max_latency NUMERIC(10,3) DEFAULT 0.000,
-    created_at TIMESTAMPS DEFAULT CURRENT_TIMESTAMPS,
-    updated_at TIMESTAMPS DEFAULT CURRENT_TIMESTAMPS,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    UNIQUE(client_id,service_name, endpoint, method, time_bucket); --if all these values are same then only we will update the record otherwise we will insert a new record
-}
+    UNIQUE(client_id,service_name, endpoint, method, time_bucket) --if all these values are same then only we will update the record otherwise we will insert a new record
+    --dont add a ; here because it will end the whole statement
+);
 
 --speeding up the queries
 CREATE INDEX IF NOT EXISTS idx_endpoint_metrics_client_id ON endpoint_metrics(client_id);
@@ -32,13 +33,12 @@ BEGIN
     NEW.updated_at = CURRENT_TIMESTAMP;
     RETURN NEW;
 END;
-$$ language 'plpgsql'
+$$ language 'plpgsql';
 
 --NEW : new is a special record valiable inside trigger
 
 DROP TRIGGER IF EXISTS update_endpoint_metrics_updated_at on endpoint_metrics;
-CREATE TRIGGER update_endpoint_metrics_updated_at BEFORE UPDATE ON endpoint_metrics FOR EACH ROW EXECUTE FUNCTION
-update_updated_at_column
+CREATE TRIGGER update_endpoint_metrics_updated_at BEFORE UPDATE ON endpoint_metrics FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 
 
