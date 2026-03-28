@@ -9,7 +9,7 @@ class RabbitMQConnection{
         this.isConnecting = false;
     }
 
-    async connect(){
+    static async connect(){
         if(this.channel){
             return this.channel;
         }
@@ -79,17 +79,17 @@ class RabbitMQConnection{
 
     }
 
-    getChannel(){
+    static getChannel(){
         return this.channel;
     }
 
-    getStatus(){
+    static getStatus(){
         if(!this.connection || !this.channel) return "disconnected";
         if(this.connect.close) return "closing"
         return "connected"
     }
 
-    async close(){
+    static async close(){
         try {
             if(this.channel){
                 await this.channel.close()
