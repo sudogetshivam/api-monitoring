@@ -38,6 +38,12 @@ const config = {
     rateLimit : {
         windowMs: parseInt(process.env.RATE_LIMIT_WINDOWS_MS || '900000', 10), // 15 minutes
         maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '1000',10) // in 15min no more requests that 1000, if exceeds close the window
+    },
+
+    cookie : {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        expiresIn: 24*60*60*1000 //it runs in miliseconds thats why *1000
     }
 
 }
