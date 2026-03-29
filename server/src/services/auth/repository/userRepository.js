@@ -69,10 +69,10 @@ class mongooUserRepository extends baseRepository{
 
     async findAll(){
         try {
-            const user = await this.model.find({isActive: true});
+            const user = await this.model.find({isActive: true}).select("-password") //ye password field ko exclude kar dega result se, security ke liye;
             return user;
         } catch (error) {
-            logger.error("Error in findind the user by all method", error)
+            logger.error("Error in findind the user by all method(No active users)", error)
             throw error
         }
     }

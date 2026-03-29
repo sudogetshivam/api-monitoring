@@ -1,6 +1,6 @@
 //to handle internal servers error
 
-class AppError extends Error{
+class appError extends Error{
     constructor(message, statusCode = 500, error = null){
         //!never use this. before super in child class because as a child class untill and unless the parent class is not called the object insatnce doesnt exist
         super(message) //this will say to its parent class which is Error, that use this message inside your constructor
@@ -10,3 +10,5 @@ class AppError extends Error{
 
     }
 }
+
+export default appError
