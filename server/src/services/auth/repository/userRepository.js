@@ -38,4 +38,49 @@ class mongooUserRepository extends baseRepository{
         }
     }
 
+    async findById(userId){
+        try{
+            const user = await this.model.findById(userId)
+            return user;
+        }
+        catch(error){
+            logger.error("Error in Finding User by Id," , error)
+            throw error;
+        }
+    }
+
+    async findByUsername(username){
+        try {
+            const user = await this.model.findOne({usernmae:username})
+        } catch (error) {
+            logger.error("Error finding user by username",error);
+        }
+    }
+
+    async findByEmail(email){
+        try {
+            const user = await this.model.findOne({email:email});
+            return user;
+        } catch (error) {
+            logger.error("Error finding user by email",error)
+            throw error
+        }
+    }
+
+    async findAll(){
+        try {
+            const user = await this.model.find({isActive: true});
+            return user;
+        } catch (error) {
+            logger.error("Error in findind the user by all method", error)
+            throw error
+        }
+    }
+
 }
+
+// Create ONE instance (object) and export it
+//like import userRepo from "userRepository.js"
+// userRepo = new mongooUserRepository()
+//userRepo.create() ==> you can access this directly
+export default new mongooUserRepository();
