@@ -27,10 +27,7 @@ export class authController{
             })
 
             res.status(201).json(ResponseFormatter.success(result.user, "Super Admin created Sucessfully", 201))
-        } catch (error) {
-            logger.error("Failed Super user Onboarding in authController of Super admin",error)
-            next(error)
-        }
+        } 
     }
 
 }
