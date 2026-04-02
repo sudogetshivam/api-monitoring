@@ -15,4 +15,4 @@ export const APPLICATION_ROLES = {
 }
 
 export const isValidClient = ((role)=> CLIENT_ROLES.includes(role));
-export const validRole = ((role)=> ROLES.includes(role));
+export const isValidRole = ((role)=> ROLES.includes(role));
